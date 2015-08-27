@@ -1,0 +1,28 @@
+{
+  "name": "Applegrams",
+  "version": "1.0.0",
+  "description": "Please feel free to submit big changes.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darrinmn9/Applegrams-2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/darrinmn9/Applegrams-2/issues"
+  },
+  "homepage": "https://github.com/darrinmn9/Applegrams-2",
+  "depedencies": {},
+  "dependencies": {
+    "cors": "^2.7.1",
+    "express": "^4.13.3",
+    "node": "0.0.0",
+    "nodemon": "^1.4.1",
+    "socket.io": "^1.3.6",
+    "underscore": "^1.8.3"
+  }
+}
