@@ -2,43 +2,6 @@ var BoardView = Backbone.View.extend({
 
   initialize: function () {
     this.render();
-
-    //this handles the clicking: first click on piece stores its data. The next click, if on another piece,
-    //switches the two; if the second click is made on an empty spot, the original piece is simple moved there.
-    var X = Y = 0, config = this.model, that = this, chop = false;
-    $('rect').on('click', function (event) {
-      if (X === 0 && $(event.currentTarget).attr('fill') !== 'white') {
-        X = Number($(event.currentTarget).attr('config_x'));
-        Y = Number($(event.currentTarget).attr('config_y'));
-      } else {
-        if ($(event.currentTarget).attr('fill') === 'white') {
-          var x = Number($(event.currentTarget).attr('config_x'));
-          var y = Number($(event.currentTarget).attr('config_y'));
-          config.moveToEmptySpot(X, Y, x, y);
-          X = Y = 0;
-          that.initialize(); //updates view and ensures the function will continue listening (maybe there's a better way)
-        } else {
-          var x = Number($(event.currentTarget).attr('config_x'));
-          var y = Number($(event.currentTarget).attr('config_y'));
-          if (x === X && y === Y) {
-            if (chop) {
-              config.removePiece(x, y);
-              that.chop();
-              chop = false;
-              X = Y = 0;
-              that.initialize();
-            } else {
-              chop = true;
-            }
-          } else {
-            config.switchPieces(x, y, X, Y);
-            X = Y = 0;
-            that.initialize();
-          }
-        }
-      }
-    });
-   
   },
 
   render: function () {
@@ -52,9 +15,15 @@ var BoardView = Backbone.View.extend({
       .attr({
         'width': this.spacing * this.width,
         'height': this.spacing * this.height,
-      })
+      }).style("float","")
     // it's a twenty-by-twenty grid
     this.tileIt();
+  },
+
+  events: {
+    'tile': function() {
+      console.log('tile');
+    }
   },
 
   //this function simply updates the View based off the state of the Model (the three matrices in BoardModel.js)
@@ -163,9 +132,48 @@ var BoardView = Backbone.View.extend({
     }
     //at the end of this long iteration, we check to see if the counts match,
     //which would imply that all words are valid 
-    if (redCount + blueCount === letterCount * 2) {
+    if (redCount + blueCount === letterCount * 2 && letterCount > 0) {
       this.checkIfConnected(letterCount);
     }
+    this.listen();
+  },
+
+  listen: function () {
+    //this handles the clicking: first click on piece stores its data. The next click, if on another piece,
+    //switches the two; if the second click is made on an empty spot, the original piece is simple moved there.
+    var X = Y = 0, config = this.model, that = this, chop = false;
+    $('rect').on('click', function (event) {
+      if (X === 0 && $(event.currentTarget).attr('fill') !== 'white') {
+        X = Number($(event.currentTarget).attr('config_x'));
+        Y = Number($(event.currentTarget).attr('config_y'));
+      } else {
+        if ($(event.currentTarget).attr('fill') === 'white') {
+          var x = Number($(event.currentTarget).attr('config_x'));
+          var y = Number($(event.currentTarget).attr('config_y'));
+          config.moveToEmptySpot(X, Y, x, y);
+          X = Y = 0;
+          that.tileIt(); //updates view and ensures the function will continue listening (maybe there's a better way)
+        } else {
+          var x = Number($(event.currentTarget).attr('config_x'));
+          var y = Number($(event.currentTarget).attr('config_y'));
+          if (x === X && y === Y) {
+            if (chop) {
+              config.removePiece(x, y);
+              that.chop();
+              chop = false;
+              X = Y = 0;
+              that.initialize();
+            } else {
+              chop = true;
+            }
+          } else {
+            config.switchPieces(x, y, X, Y);
+            X = Y = 0;
+            that.tileIt();
+          }
+        }
+      }
+    });
   },
 
   //after all the words have been validated, this step makes sure they are all a part of one big body (not separate)

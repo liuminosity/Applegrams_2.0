@@ -22,12 +22,15 @@ var Board = Backbone.Model.extend({
       storage.pieces = startingBoard;
 
       //need to arrange storage.pieces to the board and make BoardView Rerender
+      for (var i = 0; i < 3; i++) {
+        this.letter(7 + i * 2, 4, storage.pieces[i]);
+      }
 
-      /*
-        for (var i = 0; i < storage.pieces.length; i++) {
-          this.addPiece(1, i % 2, storage.pieces[i]);
-        }
-      */
+      for (i = 0; i < 4; i++) {
+        this.letter(6 + i * 2, 5, storage.pieces[i+3]);
+      }
+
+      this.trigger('start');
 
     }, this);
 
@@ -36,7 +39,16 @@ var Board = Backbone.Model.extend({
     }, this);
 
     socket.on('peel', function(pieceToAdd) {
-
+      // for (var i = this.height-1; i >= 0; i--) {
+      //   for (var j = this.width-1; j >= 0; j--) {
+      //     if (this.matrix[i][j].letter !== 0) {
+      //       this.matrix[i+1][2].letter = pieceToAdd;
+      //       this.colorWord(2, i+1);
+      //       this.trigger('tile');
+      //       return i+1; 
+      //     }
+      //   }
+      // }
     }, this);
 
     socket.on('split', function(PiecesToAdded) {
@@ -293,13 +305,13 @@ var Board = Backbone.Model.extend({
 
     this.matrix = this.makeEmptyMatrix(this.width, this.height);
     
-    for (var i = 0; i < 3; i++) {
-      this.letter(6 + i * 2, 4, this.randomLetter());
-    }
+    // for (var i = 0; i < 3; i++) {
+    //   this.letter(6 + i * 2, 4, this.randomLetter());
+    // }
 
-    for (i = 0; i < 4; i++) {
-      this.letter(5 + i * 2, 5, this.randomLetter());
-    }
+    // for (i = 0; i < 4; i++) {
+    //   this.letter(5 + i * 2, 5, this.randomLetter());
+    // }
     
   }
 });
