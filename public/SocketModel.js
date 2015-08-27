@@ -47,10 +47,10 @@ var SocketModel = Backbone.Model.extend({
       context.trigger('peel', pieceToAdd);
     });
 
-    socket.on('split', function(PiecesToAdded) {
+    socket.on('split', function(PiecesToAdd) {
       console.log('split was sent back from server');
-      context.splits = context.splits.concat(PiecesToAdded);
-      context.trigger('split', PiecesToAdded);
+      context.splits = context.splits.concat(PiecesToAdd);
+      context.trigger('split', PiecesToAdd);
     });
 
     socket.on('another player has joined', function() {

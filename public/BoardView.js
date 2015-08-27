@@ -158,11 +158,11 @@ var BoardView = Backbone.View.extend({
           var y = Number($(event.currentTarget).attr('config_y'));
           if (x === X && y === Y) {
             if (chop) {
-              config.removePiece(x, y);
-              that.chop();
+              var letter = config.removePiece(x, y);
+              config.split(letter);
               chop = false;
               X = Y = 0;
-              that.initialize();
+              that.tileIt();
             } else {
               chop = true;
             }

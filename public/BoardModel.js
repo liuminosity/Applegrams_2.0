@@ -1,5 +1,9 @@
 var Board = Backbone.Model.extend({
 
+  split: function(letter) {
+    this.get('socket').splitting(letter);
+  },
+
   initialize: function() {
     this.set('storage', {});
     var storage = this.get('storage');
@@ -13,8 +17,6 @@ var Board = Backbone.Model.extend({
       socket.peeling()
       socket.splitting(pieceToRemove)
     */
-
-
 
     //*listening for socket events
     socket.on('joined', function(startingBoard) {
@@ -39,20 +41,13 @@ var Board = Backbone.Model.extend({
     }, this);
 
     socket.on('peel', function(pieceToAdd) {
-      // for (var i = this.height-1; i >= 0; i--) {
-      //   for (var j = this.width-1; j >= 0; j--) {
-      //     if (this.matrix[i][j].letter !== 0) {
-      //       this.matrix[i+1][2].letter = pieceToAdd;
-      //       this.colorWord(2, i+1);
-      //       this.trigger('tile');
-      //       return i+1; 
-      //     }
-      //   }
-      // }
+      this.addPeel(pieceToAdd);
     }, this);
 
-    socket.on('split', function(PiecesToAdded) {
-
+    socket.on('split', function(PiecesToAdd) {
+      var spot = this.addPeel(PiecesToAdd[0]);
+      this.addPiece(3, spot, PiecesToAdd[1]);
+      this.addPiece(4, spot, PiecesToAdd[2]);
     }, this);
 
     socket.on('playerJoined', function() {
@@ -103,6 +98,18 @@ var Board = Backbone.Model.extend({
       this.letter(x, y, value);
       this.colorWord(x, y);
     };
+
+    this.addPeel = function (value) {
+      for (var i = this.height-1; i >= 0; i--) {
+        for (var j = this.width-1; j >= 0; j--) {
+          if (this.matrix[i][j].letter !== 0) {
+            this.matrix[i+1][2].letter = value;
+            this.colorWord(2, i+1);
+            return i+1; 
+          }
+        }
+      }
+    }
 
     this.removePiece = function (x, y) {
       var piece = this.letter(x, y);

@@ -90,8 +90,8 @@ io.on('connection', function(socket) {
 
   });
 
-  socket.on('spliting', function(incomingPiece) {
-    console.log('player spliting');
+  socket.on('splitting', function(incomingPiece) {
+    console.log('player splitting');
 
     //send user 3 pieces and add back original piece to letter pool
     socket.emit('split', split(letterPool, incomingPiece));
