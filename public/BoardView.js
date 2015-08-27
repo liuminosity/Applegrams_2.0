@@ -3,7 +3,6 @@ var BoardView = Backbone.View.extend({
   initialize: function() {
     this.render();
 
-
     //this handles the clicking: first click on piece stores its data. The next click, if on another piece,
     //switches the two; if the second click is made on an empty spot, the original piece is simple moved there.
     var X = Y = 0,
@@ -48,8 +47,7 @@ var BoardView = Backbone.View.extend({
   render: function() {
     this.$el.html('');
 
-    this.spacing = 75;
-    this.matrix = this.model.matrix;
+    this.spacing = 100;
     this.width = this.model.width;
     this.height = this.model.height;
     d3.select('body').append('svg')
@@ -66,8 +64,9 @@ var BoardView = Backbone.View.extend({
     d3.selectAll('rect').remove();
     d3.selectAll('text').remove();
     var redCount = blueCount = letterCount = doubleCheck = 0;
-    var matrix = this.model.matrix;
-
+    var letterMatrix = this.model.letterMatrix;
+    var blueLetters = this.model.blueLetterMatrix;
+    var redLetters = this.model.redLetterMatrix;
     for (var y = 0; y < this.height; y++) {
       for (var x = 0; x < this.width; x++) {
         d3.select('svg').append('rect').attr({
@@ -79,39 +78,30 @@ var BoardView = Backbone.View.extend({
           'config_y': y,
           'config_x': x
         });
-        if (matrix[y][x].letter !== 0) {
+        if (letterMatrix[y][x] !== 0) {
           letterCount++;
           //these two IF statements ensure lonely letters, in a column or row, will not be mistaken for invalid words
-<<<<<<< HEAD:public/BoardView.js
           if (this.model.matrix(x, y - 1) === 0 && this.model.matrix(x, y + 1) === 0) {
             redLetters[y][x] = 1;
             doubleCheck++;
           }
           if (this.model.matrix(x - 1, y) === 0 && this.model.matrix(x + 1, y) === 0) {
             blueLetters[y][x] = 1;
-=======
-          if (this.model.letter(x, y-1) === 0 && this.model.letter(x, y+1) === 0) {
-            matrix[y][x].col = 1;
-            doubleCheck++;
-          }
-          if (this.model.letter(x-1, y) === 0 && this.model.letter(x+1, y) === 0) {
-            matrix[y][x].row= 1;
->>>>>>> c0615011e3d61a1a36e955c4a0fd8e017d00d254:BoardView.js
             doubleCheck++;
           }
           //this IF statement ensures that a letter completely on its own will stay yellow, and not be added to the total count of letters in valid places
           if (doubleCheck === 2) {
             redCount--;
             blueCount--;
-            matrix[y][x].col = 0;
-            matrix[y][x].row= 0;
+            redLetters[y][x] = 0;
+            blueLetters[y][x] = 0;
           }
           doubleCheck = 0;
           d3.select('svg').append('text').attr({
             'x': x * this.spacing + this.spacing * .15,
             'y': y * this.spacing + this.spacing * .80,
             'font-size': this.spacing
-          }).text(matrix[y][x].letter);
+          }).text(letterMatrix[y][x]);
           d3.select('svg').append('rect').attr({
             'x': x * this.spacing,
             'y': y * this.spacing,
@@ -124,7 +114,7 @@ var BoardView = Backbone.View.extend({
             'config_y': y,
             'config_x': x
           });
-          if (matrix[y][x].row=== 1) {
+          if (blueLetters[y][x] === 1) {
             blueCount++;
             d3.select('svg').append('rect').attr({
               'x': x * this.spacing,
@@ -139,7 +129,7 @@ var BoardView = Backbone.View.extend({
               'config_x': x
             });
           }
-          if (matrix[y][x].col === 1) {
+          if (redLetters[y][x] === 1) {
             redCount++;
             d3.select('svg').append('rect').attr({
               'x': x * this.spacing,
@@ -156,21 +146,23 @@ var BoardView = Backbone.View.extend({
             });
           }
           if (y === 0) {
+            JSON.stringify(this.model.redLetterMatrix);
             this.model.makeBigger('top');
+            JSON.stringify(this.model.redLetterMatrix);
             this.tileIt();
           }
           if (x === 0) {
             this.model.makeBigger('left');
             this.tileIt();
           }
-          if (y >= this.height - 2) {
-            this.model.makeBigger('bottom');
-            this.tileIt();
-          }
-          if (x >= this.width -2) {
-            this.model.makeBigger('right');
-            this.tileIt();
-          }
+          // if (y >= this.height - 2) {
+          //   this.model.makeBigger('bottom');
+          //   this.tileIt();
+          // }
+          // if (x >= this.width -2) {
+          //   this.model.makeBigger('right');
+          //   this.tileIt();
+          // }
         }
       }
     }
@@ -182,22 +174,15 @@ var BoardView = Backbone.View.extend({
   },
 
   //after all the words have been validated, this step makes sure they are all a part of one big body (not separate)
-<<<<<<< HEAD:public/BoardView.js
   checkIfConnected: function(letters) {
     var letterMatrix = [];
     for (var i = 0; i < this.model.letterMatrix.length; i++) {
       letterMatrix.push(this.model.letterMatrix[i].slice());
-=======
-  checkIfConnected: function (letters) {
-    var matrix = [];
-    for (var i = 0; i < this.height; i++) {
-      matrix.push(this.model.matrix[i].slice());
->>>>>>> c0615011e3d61a1a36e955c4a0fd8e017d00d254:BoardView.js
     }
 
     for (i = 0; i < this.height; i++) {
       for (var j = 0; j < this.width; j++) {
-        if (matrix[i][j].letter !== 0) {
+        if (letterMatrix[i][j] !== 0) {
           var startPoint = [j, i];
           i += this.height;
           j += this.width;
@@ -206,7 +191,6 @@ var BoardView = Backbone.View.extend({
     }
     var count = 0;
     var model = this.model;
-<<<<<<< HEAD:public/BoardView.js
 
     function crawler(point) {
       var x = point[0],
@@ -218,17 +202,6 @@ var BoardView = Backbone.View.extend({
         crawler([x - 1, y]);
         crawler([x, y + 1]);
         crawler([x, y - 1]);
-=======
-    function crawler (point) { 
-      var x = point[0], y = point[1];
-      if (matrix[y][x] && matrix[y][x].letter !== 0) {
-        count++;
-        matrix[y][x] = 0;
-        crawler([x+1, y]);
-        crawler([x-1, y]);
-        crawler([x, y+1]);
-        crawler([x, y-1]);
->>>>>>> c0615011e3d61a1a36e955c4a0fd8e017d00d254:BoardView.js
       }
     }
     crawler(startPoint);
@@ -243,20 +216,11 @@ var BoardView = Backbone.View.extend({
   },
 
   //places new piece below lowest, most to-the-right, current piece
-<<<<<<< HEAD:public/BoardView.js
   bite: function() {
     for (var i = this.height - 1; i >= 0; i--) {
       for (var j = this.width - 1; j >= 0; j--) {
         if (this.model.letterMatrix[i][j] !== 0) {
           this.model.addPiece(2, i + 1, this.model.randomLetter());
-=======
-  bite: function () {
-    for (var i = this.height-1; i >= 0; i--) {
-      for (var j = this.width-1; j >= 0; j--) {
-        if (this.matrix[i][j].letter !== 0) {
-          this.matrix[i+1][2].letter = this.model.randomLetter();
-          this.model.colorWord(2, i+1);
->>>>>>> c0615011e3d61a1a36e955c4a0fd8e017d00d254:BoardView.js
           this.tileIt();
           return i + 1;
         }
