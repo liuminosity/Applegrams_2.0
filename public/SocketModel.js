@@ -4,7 +4,7 @@ var SocketModel = Backbone.Model.extend({
   initialize: function() {
     var context = this;
 
-    var socket = io.connect('http://localhost:3000/');
+    var socket = io.connect('https://tranquil-peak-9249.herokuapp.com/');
     var userId = null;
     context.startingPieces = null;
 
