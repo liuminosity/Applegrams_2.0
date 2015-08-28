@@ -7,8 +7,6 @@ var server = app.listen(port, function() {
   console.log('Applegrams server is listening on port: ', port);
 });
 var io = require('socket.io').listen(server);
-var cors = require('cors');
-app.use(cors());
 
 //server files in /public folder
 app.use(express.static(__dirname + '/public'));
