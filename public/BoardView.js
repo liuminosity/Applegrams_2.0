@@ -7,7 +7,7 @@ var BoardView = Backbone.View.extend({
   render: function () {
     this.$el.html('');
 
-    this.spacing = 75;
+    this.spacing = 60;
     this.matrix = this.model.matrix;
     this.width = this.model.width;
     this.height = this.model.height;
@@ -15,15 +15,9 @@ var BoardView = Backbone.View.extend({
       .attr({
         'width': this.spacing * this.width,
         'height': this.spacing * this.height,
-      }).style("float","")
+      }).style("float","");
     // it's a twenty-by-twenty grid
     this.tileIt();
-  },
-
-  events: {
-    'tile': function() {
-      console.log('tile');
-    }
   },
 
   //this function simply updates the View based off the state of the Model (the three matrices in BoardModel.js)
@@ -119,14 +113,14 @@ var BoardView = Backbone.View.extend({
             this.model.makeBigger('left');
             this.tileIt();
           }
-          // if (y >= this.height - 2) {
-          //   this.model.makeBigger('bottom');
-          //   this.tileIt();
-          // }
-          // if (x >= this.width -2) {
-          //   this.model.makeBigger('right');
-          //   this.tileIt();
-          // }
+          if (y === this.height - 1) {
+            this.model.makeBigger('bottom');
+            this.tileIt();
+          }
+          if (x === this.width -1) {
+            this.model.makeBigger('right');
+            this.tileIt();
+          }
         }
       }
     }
@@ -150,7 +144,10 @@ var BoardView = Backbone.View.extend({
         if ($(event.currentTarget).attr('fill') === 'white') {
           var x = Number($(event.currentTarget).attr('config_x'));
           var y = Number($(event.currentTarget).attr('config_y'));
-          config.moveToEmptySpot(X, Y, x, y);
+          console.log(X, Y, x, y);
+          if (config.letter(X, Y)) {
+            config.moveToEmptySpot(X, Y, x, y);
+          }
           X = Y = 0;
           that.tileIt(); //updates view and ensures the function will continue listening (maybe there's a better way)
         } else {
@@ -163,6 +160,7 @@ var BoardView = Backbone.View.extend({
               chop = false;
               X = Y = 0;
               that.tileIt();
+              setTimeout(function() { that.tileIt(); }, 3000);
             } else {
               chop = true;
             }

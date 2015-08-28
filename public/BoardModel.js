@@ -25,14 +25,12 @@ var Board = Backbone.Model.extend({
 
       //need to arrange storage.pieces to the board and make BoardView Rerender
       for (var i = 0; i < 3; i++) {
-        this.letter(7 + i * 2, 4, storage.pieces[i]);
+        this.letter(6 + i * 2, 3, storage.pieces[i]);
       }
 
       for (i = 0; i < 4; i++) {
-        this.letter(6 + i * 2, 5, storage.pieces[i+3]);
+        this.letter(5 + i * 2, 4, storage.pieces[i+3]);
       }
-
-      this.trigger('start');
 
     }, this);
 
@@ -80,8 +78,8 @@ var Board = Backbone.Model.extend({
     //The most important matrix is the "letterMatrix," which holds a value of zero where there are no tiles placed, and values of the letter itself, where it is placed
     //The redLetterMatrix keeps track of valid column-wise words, each letter of each valid is a '1'. The blueLetterMatrix does the same for row-wise words.
 
-   this.width = 17;
-    this.height = 15;
+   this.width = 15;
+   this.height = 10;
 
     this.switchPieces = function (x, y, X, Y) {
       var hold = this.letter(x, y);
