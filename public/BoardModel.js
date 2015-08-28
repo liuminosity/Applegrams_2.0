@@ -187,6 +187,19 @@ var Board = Backbone.Model.extend({
       }
     }
 
+    // counts the amount of letters on the board that have not passed both the row- and column-wise word inspection tests
+    this.countLettersLeft = function () {
+      var count = 0;
+      for (var y = 0; y < this.height; y++) {
+        for (var x = 0; x < this.width; x++) {
+          if (this.matrix[y][x].letter !== 0 && !(this.matrix[y][x].row === 1 && this.matrix[y][x].col === 1)) {
+            count++;
+          }
+        }
+      }
+      return count;
+    }
+
 
     //takes in the coordinates of a piece, and checks the scrabble-validity of both the row- and column- word of which it is a part, and colors them accordingly.
     this.colorWord = function (x, y) {
@@ -312,14 +325,6 @@ var Board = Backbone.Model.extend({
     };
 
     this.matrix = this.makeEmptyMatrix(this.width, this.height);
-    
-    // for (var i = 0; i < 3; i++) {
-    //   this.letter(6 + i * 2, 4, this.randomLetter());
-    // }
-
-    // for (i = 0; i < 4; i++) {
-    //   this.letter(5 + i * 2, 5, this.randomLetter());
-    // }
     
   }
 });
