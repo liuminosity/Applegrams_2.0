@@ -19,6 +19,7 @@ var newGameCopy = letterPool.slice();
 var usernames = {};
 var playerCount = 0;
 var lastPeel = false;
+var startUpdates = true;
 
 function removePieces(pool, number) {
   //removes # of starting pieces from pool
@@ -49,6 +50,13 @@ io.on('connection', function(socket) {
   console.log('player connected');
   playerCount++;
   var addUser = true;
+
+  if (startUpdates && playerCount > 1) {
+    setInterval(function() {
+      io.emit('dashboardUpdate', usernames)
+    }, 15000);
+    startUpdates = false;
+  }
 
   //send each user a unique identifier
   socket.emit('userId', playerCount);
@@ -116,6 +124,7 @@ io.on('connection', function(socket) {
       letterPool = newGameCopy.slice();
       usernames = {};
       lastPeel = false;
+      startUpdates = true;
     }
   });
 

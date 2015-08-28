@@ -12,7 +12,6 @@ var Board = Backbone.Model.extend({
   },
 
   updateTableInfo: function(userObj) {
-    console.log('updating');
     this.get('socket').updateTableInfo(userObj);
   },
 
@@ -45,7 +44,6 @@ var Board = Backbone.Model.extend({
 
     //*listening for socket events
     socket.on('joined', function(startingBoard) {
-      console.log('BoardModel recieved starting pieces: ', startingBoard);
       this.storage.pieces = startingBoard;
 
       //need to arrange storage.pieces to the board and make BoardView Rerender
@@ -74,7 +72,6 @@ var Board = Backbone.Model.extend({
       var spot = this.addPeel(PiecesToAdd[0]);
       this.addPiece(3, spot, PiecesToAdd[1]);
       this.addPiece(4, spot, PiecesToAdd[2]);
-      console.log(this.storage.pieces, 'hi')
       this.storage.pieces = this.storage.pieces.concat(PiecesToAdd);
     }, this);
 

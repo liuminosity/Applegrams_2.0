@@ -25,13 +25,11 @@ var SocketModel = Backbone.Model.extend({
     };
 
     this.updateTableInfo = function(userObj) {
-      console.log('client', userObj);
       socket.emit('updateTableInfo', userObj);
     }
 
     //array containing starting pieces
     socket.on('joined', function(startingBoard) {
-      console.log('socketModel recieved board: ', startingBoard);
       context.startingPieces = startingBoard;
       context.trigger('joined', startingBoard);
       //trigger show board event
@@ -55,6 +53,10 @@ var SocketModel = Backbone.Model.extend({
       console.log('split was sent back from server');
       context.splits = context.splits.concat(PiecesToAdd);
       context.trigger('split', PiecesToAdd);
+    });
+
+    socket.on('dashboardUpdate', function(data) {
+      console.log(data);
     });
 
     socket.on('another player has joined', function() {

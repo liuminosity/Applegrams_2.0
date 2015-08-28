@@ -163,7 +163,6 @@ var BoardView = Backbone.View.extend({
         if ($(event.currentTarget).attr('fill') === 'white') {
           var x = Number($(event.currentTarget).attr('config_x'));
           var y = Number($(event.currentTarget).attr('config_y'));
-          console.log(X, Y, x, y);
           if (config.letter(X, Y)) {
             config.moveToEmptySpot(X, Y, x, y);
           }
