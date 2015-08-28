@@ -37,7 +37,7 @@ var BoardView = Backbone.View.extend({
   },
 
   //this function simply updates the View based off the state of the Model (the three matrices in BoardModel.js)
-  tileIt: function() {
+  tileIt: function(loopGuard) {
     d3.selectAll('rect').remove();
     d3.selectAll('text').remove();
     var redCount = blueCount = letterCount = doubleCheck = 0;
@@ -143,7 +143,9 @@ var BoardView = Backbone.View.extend({
     //at the end of this long iteration, we check to see if the counts match,
     //which would imply that all words are valid
     if (redCount + blueCount === letterCount * 2 && letterCount > 0) {
-      this.checkIfConnected(letterCount);
+      if (loopGuard === undefined) {
+        this.checkIfConnected(letterCount);
+      }
     }
     this.listen();
   },
@@ -233,28 +235,9 @@ var BoardView = Backbone.View.extend({
 
   //temporary
   completed: function() {
-    this.bite();
-  },
-
-  //places new piece below lowest, most to-the-right, current piece
-  bite: function() {
-    for (var i = this.height - 1; i >= 0; i--) {
-      for (var j = this.width - 1; j >= 0; j--) {
-        if (this.matrix[i][j].letter !== 0) {
-          this.matrix[i + 1][2].letter = this.model.randomLetter();
-          this.model.colorWord(2, i + 1);
-          this.tileIt();
-          return i + 1;
-        }
-      }
-    }
-  },
-
-  chop: function() {
-    var spot = this.bite();
-    this.model.addPiece(3, spot, this.model.randomLetter());
-    this.model.addPiece(4, spot, this.model.randomLetter());
-    this.tileIt();
+    this.model.peel();
+    var that = this;
+    setTimeout(function(){ that.tileIt(true); }, 1000);
   }
 
 });

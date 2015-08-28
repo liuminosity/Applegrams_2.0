@@ -3,7 +3,7 @@ var SocketModel = Backbone.Model.extend({
 
   initialize: function() {
     var context = this;
-
+    
     // var socket = io.connect('https://pacific-caverns-9735.herokuapp.com/');
     var socket = io.connect('http://localhost:3000');
 
@@ -36,7 +36,6 @@ var SocketModel = Backbone.Model.extend({
     socket.on('peeled', function(pieceToAdd) {
       console.log('the server peeled');
 
-      context.peels.push(pieceToAdd[userId - 1]);
       context.trigger('peel', pieceToAdd);
     });
 

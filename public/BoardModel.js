@@ -69,6 +69,7 @@ var Board = Backbone.Model.extend({
     }, this);
 
     socket.on('peel', function(pieceToAdd) {
+      console.log('piece added', pieceToAdd)
       this.addPeel(pieceToAdd);
     }, this);
 
