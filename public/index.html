@@ -20,7 +20,17 @@
     $(function(){
       var board = new Board();
       var boardView = new BoardView({model: board});
+      $('form').submit(function() {
+        console.log('INPUT')
+      });
     });
   </script>
+  <div>
+    <form>
+    Enter Username:<br>
+    <input type="text" name="username">
+    <br>
+    </form>
+  </div>
 </body>
 </html>

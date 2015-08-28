@@ -14,7 +14,23 @@ var BoardView = Backbone.View.extend({
     d3.select('body').append('svg')
       .attr({
         'width': this.spacing * this.width,
+        'height': this.spacing,
+        'class': "header"
+      }).style("float","");
+    for (var i = 0; i < this.width; i++) {
+      d3.select('.header').append('rect').attr({
+          'x': i * this.spacing,
+          'y': this.spacing,
+          'width': this.spacing,
+          'height': this.spacing,
+          'fill': "black"
+      });
+    }
+    d3.select('body').append('svg')
+      .attr({
+        'width': this.spacing * this.width,
         'height': this.spacing * this.height,
+        'class': 'body'
       }).style("float","");
     // it's a twenty-by-twenty grid
     this.tileIt();
@@ -29,7 +45,7 @@ var BoardView = Backbone.View.extend({
 
     for (var y = 0; y < this.height; y++) {
       for (var x = 0; x < this.width; x++) {
-        d3.select('svg').append('rect').attr({
+        d3.select('.body').append('rect').attr({
           'x': x * this.spacing,
           'y': y * this.spacing,
           'height': this.spacing,
@@ -57,12 +73,12 @@ var BoardView = Backbone.View.extend({
             matrix[y][x].row= 0;
           }
           doubleCheck = 0;
-          d3.select('svg').append('text').attr({
+          d3.select('.body').append('text').attr({
             'x': x * this.spacing + this.spacing * .15,
             'y': y * this.spacing + this.spacing * .80,
             'font-size': this.spacing
           }).text(matrix[y][x].letter);
-          d3.select('svg').append('rect').attr({
+          d3.select('.body').append('rect').attr({
             'x': x * this.spacing,
             'y': y * this.spacing,
             'height': this.spacing,
@@ -76,7 +92,7 @@ var BoardView = Backbone.View.extend({
           });
           if (matrix[y][x].row=== 1) {
             blueCount++;
-            d3.select('svg').append('rect').attr({
+            d3.select('.body').append('rect').attr({
               'x': x * this.spacing,
               'y': y * this.spacing,
               'height': this.spacing,
@@ -91,7 +107,7 @@ var BoardView = Backbone.View.extend({
           }
           if (matrix[y][x].col === 1) {
             redCount++;
-            d3.select('svg').append('rect').attr({
+            d3.select('.body').append('rect').attr({
               'x': x * this.spacing,
               'y': y * this.spacing,
               'height': this.spacing,
