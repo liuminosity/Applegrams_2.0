@@ -5,10 +5,13 @@ var Board = Backbone.Model.extend({
     this.get('socket').splitting(letter);
 
     this.storage.pieces.splice(this.storage.pieces.indexOf(letter), 1);
+    this.storage.splits++;
   },
 
   peel: function() {
     this.get('socket').peeling();
+    this.storage.peels++;
+
   },
 
   updateTableInfo: function(userObj) {
@@ -34,12 +37,14 @@ var Board = Backbone.Model.extend({
       }
       $('.user-form').remove();
 
+      context.storage.peels = 0;
+      context.storage.splits = 0;
+
       setInterval(function() {
         context.updateTableInfo(context.storage)
       }, 10000);
 
     });
-
 
 
     //*listening for socket events

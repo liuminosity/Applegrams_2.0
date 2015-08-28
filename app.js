@@ -52,10 +52,10 @@ io.on('connection', function(socket) {
   var addUser = true;
 
   if (startUpdates && playerCount > 1) {
-    setInterval(function() {
+    startUpdates = false;
+    var timer = setInterval(function() {
       io.emit('dashboardUpdate', usernames)
     }, 15000);
-    startUpdates = false;
   }
 
   //send each user a unique identifier
@@ -107,9 +107,6 @@ io.on('connection', function(socket) {
 
   socket.on('updateTableInfo', function(userObj) {
     usernames[userObj.userId] = userObj;
-    console.log(usernames);
-    console.log('server', userObj);
-
   });
 
   socket.on('disconnect', function() {
@@ -120,11 +117,12 @@ io.on('connection', function(socket) {
       playerCount--;
     }
     socket.broadcast.emit('player disconnected');
-    if (playerCount === 0) {
+    if (playerCount < 1) {
       letterPool = newGameCopy.slice();
       usernames = {};
       lastPeel = false;
       startUpdates = true;
+      clearInterval(timer);
     }
   });
 

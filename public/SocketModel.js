@@ -6,14 +6,6 @@ var SocketModel = Backbone.Model.extend({
 
     // var socket = io.connect('https://hidden-chamber-2140.herokuapp.com/');
     var socket = io.connect('http://localhost:3000');
-    var userId = null;
-    context.startingPieces = null;
-
-    //keeps log of all peels, most recent piece pushed to end
-    context.peels = [];
-
-    //keeps log of all splits, most recent pieces pushed to end
-    context.splits = [];
 
     this.peeling = function() {
       console.log('client peeling');
@@ -45,14 +37,12 @@ var SocketModel = Backbone.Model.extend({
       console.log('the server peeled');
 
       context.peels.push(pieceToAdd[userId - 1]);
-      //trigger peel evepent
       context.trigger('peel', pieceToAdd);
     });
 
-    socket.on('split', function(PiecesToAdd) {
-      console.log('split was sent back from server');
-      context.splits = context.splits.concat(PiecesToAdd);
-      context.trigger('split', PiecesToAdd);
+    socket.on('split', function(piecesToAdd) {
+      console.log('split was sent back from server', piecesToAdd);
+      context.trigger('split', piecesToAdd);
     });
 
     socket.on('dashboardUpdate', function(data) {
