@@ -4,8 +4,8 @@ var SocketModel = Backbone.Model.extend({
   initialize: function() {
     var context = this;
 
-    var socket = io.connect('https://pacific-caverns-9735.herokuapp.com/');
-    // var socket = io.connect('http://localhost:3000');
+    // var socket = io.connect('https://pacific-caverns-9735.herokuapp.com/');
+    var socket = io.connect('http://localhost:3000');
 
     this.peeling = function() {
       console.log('client peeling');
