@@ -15,14 +15,22 @@ var SocketModel = Backbone.Model.extend({
     //keeps log of all splits, most recent pieces pushed to end
     context.splits = [];
 
-    context.peeling = function() {
+    this.peeling = function() {
       console.log('client peeling');
       socket.emit('peeling');
     };
 
-    context.splitting = function(pieceToRemove) {
+    this.splitting = function(pieceToRemove) {
       console.log('client splitting', pieceToRemove);
       socket.emit('splitting', pieceToRemove);
+    };
+
+    this.sendName = function(username, userId) {
+      console.log('client sent username', username, userId);
+      socket.emit('username', {
+        userId: userId,
+        username: username
+      });
     };
 
     //array containing starting pieces

@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Applegrams</title>
-  <style>
-  </style>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <title>Applegrams</title>
+    <style></style>
+  </head>
 
-<body>
+  <body>
+    <div>
+      <form class="user-form">
+      Enter Username:<br>
+      <input type="text" name="username" class="username">
+      <br>
+      </form>
+    </div>
+  </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
@@ -20,17 +27,6 @@
     $(function(){
       var board = new Board();
       var boardView = new BoardView({model: board});
-      $('form').submit(function() {
-        console.log('INPUT')
-      });
     });
   </script>
-  <div>
-    <form>
-    Enter Username:<br>
-    <input type="text" name="username">
-    <br>
-    </form>
-  </div>
-</body>
 </html>

@@ -16,7 +16,7 @@ app.use(express.static(__dirname + '/public'));
 
 var letterPool = ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'D', 'D', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'F', 'F', 'F', 'G', 'G', 'G', 'G', 'H', 'H', 'H', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'J', 'J', 'K', 'K', 'L', 'L', 'L', 'L', 'L', 'M', 'M', 'M', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'P', 'P', 'P', 'Q', 'Q', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'S', 'S', 'T', 'T', 'T', 'T', 'T', 'T', 'T', 'T', 'T', 'U', 'U', 'U', 'U', 'U', 'U', 'V', 'V', 'V', 'W', 'W', 'W', 'X', 'X', 'Y', 'Y', 'Y', 'Z', 'Z']
 var newGameCopy = letterPool.slice();
-// var usernames = {};
+var usernames = {};
 var playerCount = 0;
 var lastPeel = false;
 
@@ -97,6 +97,13 @@ io.on('connection', function(socket) {
     }
   });
 
+  socket.on('username', function(data) {
+    console.log('username recieved');
+    usernames[data.userId] = data.username;
+    console.log(usernames);
+
+  });
+
   socket.on('disconnect', function() {
     console.log('player disconnected');
 
@@ -107,6 +114,8 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('player disconnected');
     if (playerCount === 0) {
       letterPool = newGameCopy.slice();
+      usernames = {};
+      lastPeel = false;
     }
   });
 
