@@ -7,23 +7,33 @@ var BoardView = Backbone.View.extend({
   render: function () {
     this.$el.html('');
 
-    this.spacing = 75;
+    this.spacing = 60;
     this.matrix = this.model.matrix;
     this.width = this.model.width;
     this.height = this.model.height;
     d3.select('body').append('svg')
       .attr({
         'width': this.spacing * this.width,
+        'height': this.spacing,
+        'class': "header"
+      }).style("float","");
+    for (var i = 0; i < this.width; i++) {
+      d3.select('.header').append('rect').attr({
+          'x': i * this.spacing,
+          'y': this.spacing,
+          'width': this.spacing,
+          'height': this.spacing,
+          'fill': "black"
+      });
+    }
+    d3.select('body').append('svg')
+      .attr({
+        'width': this.spacing * this.width,
         'height': this.spacing * this.height,
-      }).style("float","")
+        'class': 'body'
+      }).style("float","");
     // it's a twenty-by-twenty grid
     this.tileIt();
-  },
-
-  events: {
-    'tile': function() {
-      console.log('tile');
-    }
   },
 
   //this function simply updates the View based off the state of the Model (the three matrices in BoardModel.js)
@@ -35,7 +45,7 @@ var BoardView = Backbone.View.extend({
 
     for (var y = 0; y < this.height; y++) {
       for (var x = 0; x < this.width; x++) {
-        d3.select('svg').append('rect').attr({
+        d3.select('.body').append('rect').attr({
           'x': x * this.spacing,
           'y': y * this.spacing,
           'height': this.spacing,
@@ -63,12 +73,12 @@ var BoardView = Backbone.View.extend({
             matrix[y][x].row= 0;
           }
           doubleCheck = 0;
-          d3.select('svg').append('text').attr({
+          d3.select('.body').append('text').attr({
             'x': x * this.spacing + this.spacing * .15,
             'y': y * this.spacing + this.spacing * .80,
             'font-size': this.spacing
           }).text(matrix[y][x].letter);
-          d3.select('svg').append('rect').attr({
+          d3.select('.body').append('rect').attr({
             'x': x * this.spacing,
             'y': y * this.spacing,
             'height': this.spacing,
@@ -82,7 +92,7 @@ var BoardView = Backbone.View.extend({
           });
           if (matrix[y][x].row=== 1) {
             blueCount++;
-            d3.select('svg').append('rect').attr({
+            d3.select('.body').append('rect').attr({
               'x': x * this.spacing,
               'y': y * this.spacing,
               'height': this.spacing,
@@ -97,7 +107,7 @@ var BoardView = Backbone.View.extend({
           }
           if (matrix[y][x].col === 1) {
             redCount++;
-            d3.select('svg').append('rect').attr({
+            d3.select('.body').append('rect').attr({
               'x': x * this.spacing,
               'y': y * this.spacing,
               'height': this.spacing,
@@ -119,14 +129,14 @@ var BoardView = Backbone.View.extend({
             this.model.makeBigger('left');
             this.tileIt();
           }
-          // if (y >= this.height - 2) {
-          //   this.model.makeBigger('bottom');
-          //   this.tileIt();
-          // }
-          // if (x >= this.width -2) {
-          //   this.model.makeBigger('right');
-          //   this.tileIt();
-          // }
+          if (y === this.height - 1) {
+            this.model.makeBigger('bottom');
+            this.tileIt();
+          }
+          if (x === this.width -1) {
+            this.model.makeBigger('right');
+            this.tileIt();
+          }
         }
       }
     }
@@ -150,7 +160,10 @@ var BoardView = Backbone.View.extend({
         if ($(event.currentTarget).attr('fill') === 'white') {
           var x = Number($(event.currentTarget).attr('config_x'));
           var y = Number($(event.currentTarget).attr('config_y'));
-          config.moveToEmptySpot(X, Y, x, y);
+          console.log(X, Y, x, y);
+          if (config.letter(X, Y)) {
+            config.moveToEmptySpot(X, Y, x, y);
+          }
           X = Y = 0;
           that.tileIt(); //updates view and ensures the function will continue listening (maybe there's a better way)
         } else {
@@ -163,6 +176,7 @@ var BoardView = Backbone.View.extend({
               chop = false;
               X = Y = 0;
               that.tileIt();
+              setTimeout(function() { that.tileIt(); }, 3000);
             } else {
               chop = true;
             }

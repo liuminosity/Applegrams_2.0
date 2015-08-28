@@ -45,6 +45,7 @@ var Board = Backbone.Model.extend({
     }, this);
 
     socket.on('split', function(PiecesToAdd) {
+      console.log('new pieces', PiecesToAdd);
       var spot = this.addPeel(PiecesToAdd[0]);
       this.addPiece(3, spot, PiecesToAdd[1]);
       this.addPiece(4, spot, PiecesToAdd[2]);
@@ -80,7 +81,7 @@ var Board = Backbone.Model.extend({
     //The most important matrix is the "letterMatrix," which holds a value of zero where there are no tiles placed, and values of the letter itself, where it is placed
     //The redLetterMatrix keeps track of valid column-wise words, each letter of each valid is a '1'. The blueLetterMatrix does the same for row-wise words.
 
-   this.width = 17;
+   this.width = 20;
     this.height = 15;
 
     this.switchPieces = function (x, y, X, Y) {
@@ -103,7 +104,7 @@ var Board = Backbone.Model.extend({
       for (var i = this.height-1; i >= 0; i--) {
         for (var j = this.width-1; j >= 0; j--) {
           if (this.matrix[i][j].letter !== 0) {
-            this.matrix[i+1][2].letter = value;
+            this.letter(2, i+1, value); 
             this.colorWord(2, i+1);
             return i+1; 
           }
