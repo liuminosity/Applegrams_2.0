@@ -20,11 +20,6 @@ var newGameCopy = letterPool.slice();
 var playerCount = 0;
 var lastPeel = false;
 
-function resetBoard(pool){
-  pool = newGameCopy.slice();
-  return pool;
-}
-
 function removePieces(pool, number) {
   //removes # of starting pieces from pool
   var result = [];
@@ -110,8 +105,8 @@ io.on('connection', function(socket) {
       playerCount--;
     }
     socket.broadcast.emit('player disconnected');
-    if(playerCount === 0){
-      resetBoard(letterPool);
+    if (playerCount === 0) {
+      letterPool = newGameCopy.slice();
     }
   });
 
