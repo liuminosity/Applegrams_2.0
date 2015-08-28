@@ -14,7 +14,7 @@ var Board = Backbone.Model.extend({
 
   },
 
-  updateTableInfo: function(userObj) {
+  sendTableInfo: function(userObj) {
     this.get('socket').updateTableInfo(userObj);
   },
 
@@ -35,14 +35,14 @@ var Board = Backbone.Model.extend({
       } else {
         context.storage.username = username.slice(0, 30);
       }
-      $('.user-form').remove();
-      $('.dashboard').show();
+      $('.user-form-container').remove();
+      $('.dashboard-container').show();
 
       context.storage.peels = 0;
       context.storage.splits = 0;
 
       setInterval(function() {
-        context.updateTableInfo(context.storage)
+        context.sendTableInfo(context.storage)
       }, 10000);
 
     });
@@ -82,6 +82,29 @@ var Board = Backbone.Model.extend({
       this.storage.pieces = this.storage.pieces.concat(PiecesToAdd);
     }, this);
 
+    socket.on('updateTableInfo', function(tableInfo, lettersLeft) {
+
+      $(".table-rows").detach();
+
+      $(".pool").html('Letters remaining: ' + lettersLeft);
+
+      for (var key in tableInfo) {
+
+        var username = tableInfo[key]['username'];
+        var peels = tableInfo[key]['peels'];
+        var splits = tableInfo[key]['splits'];
+        var row = $('<tr class="table-rows">' +
+          '<td class="user">' + username + '</td>' +
+          '<td class="peels">' + peels + '</td>' +
+          '<td class="splits">' + splits + '</td>' +
+          '< /tr>');
+
+
+        $('.dashboard-table').append(row);
+
+      }
+    }, this);
+
     socket.on('playerJoined', function() {
 
     }, this);
@@ -107,7 +130,7 @@ var Board = Backbone.Model.extend({
 
 
 
-    //These functions operate on one or all of the three 10-by-10 matrices used as our Models, and built at the bottom of initialize (scroll down).
+    //These functions operate on one or all of the three 10 - by - 10 matrices used as our Models, and built at the bottom of initialize(scroll down).
     // (0,0) is the coordinate of the top-left-most spot in each matrix.
     //The most important matrix is the "letterMatrix," which holds a value of zero where there are no tiles placed, and values of the letter itself, where it is placed
     //The redLetterMatrix keeps track of valid column-wise words, each letter of each valid is a '1'. The blueLetterMatrix does the same for row-wise words.

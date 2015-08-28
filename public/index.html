@@ -7,15 +7,24 @@
   </head>
 
   <body>
-    <div>
+    <div class="user-form-container">
       <form class="user-form">
       Enter Username:<br>
-      <input type="text" name="username" class="username">
+      <input type="text" name="username" class="username" autofocus>
       <br>
       </form>
     </div>
-    <div class="dashboard">
 
+    <div class="dashboard-container">
+      <div class="pool"></div>
+      <table style="width:1%" class="dashboard-table">
+        <tr class="table-headers">
+          <th>Username</th>
+          <th>Peels</th>
+          <th>Splits</th>
+        </tr>
+
+      </table>
     </div>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>

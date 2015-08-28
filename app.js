@@ -52,7 +52,7 @@ io.on('connection', function(socket) {
   if (startUpdates && playerCount > 1) {
     startUpdates = false;
     var timer = setInterval(function() {
-      io.emit('dashboardUpdate', usernames)
+      io.emit('dashboardUpdate', usernames, letterPool.length)
     }, 15000);
   }
 

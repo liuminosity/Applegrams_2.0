@@ -3,7 +3,7 @@ var SocketModel = Backbone.Model.extend({
 
   initialize: function() {
     var context = this;
-    
+
     // var socket = io.connect('https://pacific-caverns-9735.herokuapp.com/');
     var socket = io.connect('http://localhost:3000');
 
@@ -16,7 +16,7 @@ var SocketModel = Backbone.Model.extend({
       socket.emit('splitting', pieceToRemove);
     };
 
-    this.updateTableInfo = function(userObj) {
+    this.updateTableInfo = function(userObj, lettersLeft) {
       socket.emit('updateTableInfo', userObj);
     }
 
@@ -44,8 +44,9 @@ var SocketModel = Backbone.Model.extend({
       context.trigger('split', piecesToAdd);
     });
 
-    socket.on('dashboardUpdate', function(data) {
-      console.log(data);
+    socket.on('dashboardUpdate', function(data, lettersLeft) {
+      console.log('newdashboard', JSON.stringify(data));
+      context.trigger('updateTableInfo', data, lettersLeft);
     });
 
     socket.on('another player has joined', function() {
