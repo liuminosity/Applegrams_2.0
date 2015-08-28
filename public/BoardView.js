@@ -179,9 +179,8 @@ var BoardView = Backbone.View.extend({
               config.split(letter);
               chop = false;
               X = Y = 0;
-              that.tileIt();
               setTimeout(function() {
-                that.tileIt();
+                that.tileIt(true);
               }, 3000);
             } else {
               chop = true;
