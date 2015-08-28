@@ -47,7 +47,6 @@ function peelToWin(pool, players) {
 
 io.on('connection', function(socket) {
   console.log('player connected');
-  console.log(letterPool.length);
   playerCount++;
   var addUser = true;
 
@@ -56,6 +55,7 @@ io.on('connection', function(socket) {
 
   //once a user connects, send them 7 starting pieces
   socket.emit('joined', removePieces(letterPool, 7));
+  console.log(letterPool.length);
 
   //broadcast event to other players
   socket.broadcast.emit('another player has joined');
@@ -97,10 +97,10 @@ io.on('connection', function(socket) {
     }
   });
 
-  socket.on('username', function(data) {
-    console.log('username recieved');
-    usernames[data.userId] = data.username;
+  socket.on('updateTableInfo', function(userObj) {
+    usernames[userObj.userId] = userObj;
     console.log(usernames);
+    console.log('server', userObj);
 
   });
 

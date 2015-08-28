@@ -21,17 +21,13 @@ var SocketModel = Backbone.Model.extend({
     };
 
     this.splitting = function(pieceToRemove) {
-      console.log('client splitting', pieceToRemove);
       socket.emit('splitting', pieceToRemove);
     };
 
-    this.sendName = function(username, userId) {
-      console.log('client sent username', username, userId);
-      socket.emit('username', {
-        userId: userId,
-        username: username
-      });
-    };
+    this.updateTableInfo = function(userObj) {
+      console.log('client', userObj);
+      socket.emit('updateTableInfo', userObj);
+    }
 
     //array containing starting pieces
     socket.on('joined', function(startingBoard) {
