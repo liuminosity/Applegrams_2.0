@@ -1,5 +1,7 @@
 .dashboard-container {
-  display: none
+  display: none;
+  position:fixed;
+  top: 0px;
 }
 
 table, th, td {
@@ -13,6 +15,3 @@ th {
     text-align: left;
 }
 
-.table-headers {
-
-}

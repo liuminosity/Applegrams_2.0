@@ -8,7 +8,6 @@ var SocketModel = Backbone.Model.extend({
     var socket = io.connect('http://localhost:3000');
 
     this.peeling = function() {
-      console.log('client peeling');
       socket.emit('peeling');
     };
 
@@ -16,7 +15,7 @@ var SocketModel = Backbone.Model.extend({
       socket.emit('splitting', pieceToRemove);
     };
 
-    this.updateTableInfo = function(userObj, lettersLeft) {
+    this.updateTableInfo = function(userObj) {
       socket.emit('updateTableInfo', userObj);
     }
 
@@ -33,10 +32,10 @@ var SocketModel = Backbone.Model.extend({
       context.trigger('userId', data);
     });
 
-    socket.on('peeled', function(pieceToAdd) {
-      console.log('the server peeled');
+    socket.on('peeled', function(piecesArray) {
+      console.log('the server peeled', piecesArray);
 
-      context.trigger('peel', pieceToAdd);
+      context.trigger('peel', piecesArray);
     });
 
     socket.on('split', function(piecesToAdd) {
@@ -45,7 +44,6 @@ var SocketModel = Backbone.Model.extend({
     });
 
     socket.on('dashboardUpdate', function(data, lettersLeft) {
-      console.log('newdashboard', JSON.stringify(data));
       context.trigger('updateTableInfo', data, lettersLeft);
     });
 
@@ -65,6 +63,8 @@ var SocketModel = Backbone.Model.extend({
 
     socket.on('You Lose', function(winningBoard) {
       context.trigger('lose', winningBoard);
+      console.log('you lose')
+
     });
 
 

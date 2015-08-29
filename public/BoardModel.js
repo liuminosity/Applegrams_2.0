@@ -43,7 +43,7 @@ var Board = Backbone.Model.extend({
 
       setInterval(function() {
         context.sendTableInfo(context.storage)
-      }, 10000);
+      }, 1000);
 
     });
 
@@ -70,8 +70,8 @@ var Board = Backbone.Model.extend({
     }, this);
 
     socket.on('peel', function(pieceToAdd) {
-      console.log('piece added', pieceToAdd)
-      this.addPeel(pieceToAdd);
+      console.log('board piece added', pieceToAdd[this.storage.userId - 1])
+      this.addPeel(pieceToAdd[this.storage.userId - 1]);
     }, this);
 
     socket.on('split', function(PiecesToAdd) {
