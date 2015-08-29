@@ -19,9 +19,6 @@ var playerCount = 0;
 var lastPeel = false;
 var startUpdates = true;
 
-setInterval(function() {
-  console.log(lastPeel)
-}, 5000)
 
 function removePieces(pool, number) {
   //removes # of starting pieces from pool
